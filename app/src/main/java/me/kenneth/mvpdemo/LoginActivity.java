@@ -92,6 +92,18 @@ public class LoginActivity extends AppCompatActivity implements LoginContract.Vi
     snackbar.show();
   }
 
+  @Override public void showForgetPassword() {
+    final Snackbar snackbar =
+        Snackbar.make(mEmailView, R.string.forget_password, Snackbar.LENGTH_INDEFINITE);
+    snackbar.setAction(android.R.string.ok, new View.OnClickListener() {
+      @Override public void onClick(View v) {
+        snackbar.dismiss();
+      }
+    });
+
+    snackbar.show();
+  }
+
   @Override public boolean isActive() {
     if (Build.VERSION.SDK_INT < Build.VERSION_CODES.JELLY_BEAN_MR1) {
       return !isFinishing();

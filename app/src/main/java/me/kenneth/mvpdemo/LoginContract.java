@@ -15,9 +15,13 @@ public interface LoginContract {
     void showProgress(boolean show);
 
     void showPersonalCenter(User user);
+
+    void showForgetPassword();
   }
 
   interface Presenter extends BasePresenter {
     void attemptLogin(String email, String password);
+
+    void forgetPassword();
   }
 }

@@ -1,9 +1,9 @@
 package me.kenneth.mvpdemo;
 
 import android.support.annotation.NonNull;
-import android.text.TextUtils;
 import me.kenneth.mvpdemo.data.LoginDataSource;
 import me.kenneth.mvpdemo.model.User;
+import me.kenneth.mvpdemo.util.Utils;
 
 /**
  * Created by kenneth on 2016/12/28.
@@ -13,7 +13,8 @@ public class LoginPresenter implements LoginContract.Presenter {
   private final LoginContract.View mView;
   private final LoginDataSource mDataSource;
 
-  public LoginPresenter(@NonNull LoginDataSource dataSource, @NonNull LoginContract.View view) {
+  public LoginPresenter(@NonNull LoginDataSource dataSource,
+      @NonNull LoginContract.View view) {
     this.mView = view;
     this.mDataSource = dataSource;
   }
@@ -23,12 +24,12 @@ public class LoginPresenter implements LoginContract.Presenter {
   }
 
   @Override public void attemptLogin(String email, String password) {
-    if (!TextUtils.isEmpty(password) && !isPasswordValid(password)) {
+    if (Utils.isEmpty(password) || !Utils.isPasswordValid(password)) {
       mView.showPasswordError();
       return;
     }
 
-    if (TextUtils.isEmpty(email) || !isEmailValid(email)) {
+    if (Utils.isEmpty(email) || !Utils.isEmailValid(email)) {
       mView.showEmailError();
       return;
     }
@@ -51,11 +52,7 @@ public class LoginPresenter implements LoginContract.Presenter {
     });
   }
 
-  private boolean isEmailValid(String email) {
-    return email.contains("@");
-  }
-
-  private boolean isPasswordValid(String password) {
-    return password.length() > 4;
+  @Override public void forgetPassword() {
+    mView.showForgetPassword();
   }
 }
