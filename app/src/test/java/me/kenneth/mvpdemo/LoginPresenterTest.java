@@ -2,6 +2,7 @@ package me.kenneth.mvpdemo;
 
 import me.kenneth.mvpdemo.data.LoginDataSource;
 import me.kenneth.mvpdemo.model.User;
+import org.junit.After;
 import org.junit.Before;
 import org.junit.Test;
 import org.mockito.ArgumentCaptor;
@@ -12,6 +13,7 @@ import org.mockito.MockitoAnnotations;
 import org.mockito.invocation.InvocationOnMock;
 import org.mockito.stubbing.Answer;
 
+import static org.mockito.ArgumentMatchers.eq;
 import static org.mockito.Mockito.any;
 import static org.mockito.Mockito.anyString;
 import static org.mockito.Mockito.doAnswer;
@@ -33,6 +35,10 @@ public class LoginPresenterTest {
     presenter = new LoginPresenter(source, view);
 
     when(view.isActive()).thenReturn(true);
+  }
+
+  @After public void tearDown() {
+    presenter = null;
   }
 
   @Test public void attemptLogin_email_error() {
@@ -63,9 +69,10 @@ public class LoginPresenterTest {
     InOrder inOrder = inOrder(view);
     inOrder.verify(view).showProgress(true);
 
-    verify(source).login(anyString(), anyString(), loginCallbackCaptor.capture());
+    verify(source).login(eq(email), eq(password), loginCallbackCaptor.capture());
     loginCallbackCaptor.getValue().onLoginSuccess(user);
 
+    verify(view).isActive();
     inOrder.verify(view).showProgress(false);
     verify(view).showPersonalCenter(user);
   }
@@ -82,6 +89,7 @@ public class LoginPresenterTest {
 
     loginCallbackCaptor.getValue().onLoginFailure();
 
+    verify(view).isActive();
     verify(view).showProgress(false);
     verify(view).showPasswordError();
   }
@@ -102,6 +110,7 @@ public class LoginPresenterTest {
     presenter.attemptLogin(email, password);
 
     verify(view).showProgress(true);
+    verify(view).isActive();
     verify(view).showProgress(false);
     verify(view).showPasswordError();
   }
